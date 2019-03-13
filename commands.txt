@@ -1,0 +1,15 @@
+npm install -g vue-cli
+vue init webpack-simple pizza-planet
+npm install
+npm run dev
+
+npm install --save firebase //for installing npm module
+
+npm install --save vue-router
+npm install --save vuex
+
+npm install babel-preset-stage-2 --save-dev
+
+npm install vuexfire --save
+
+npm install accounting-js --save
