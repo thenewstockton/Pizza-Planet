@@ -69,6 +69,23 @@
         components: {
             ppNewPizza: NewPizza,
             ppLogin: Login
+        },
+        beforeRouteLeave: (to, from, next) => {
+            if(confirm("Have you remembered to logout")){
+                next();
+            } else {
+                next(false);
+            }
         }
+        // data(){
+        //     return {
+        //         name: 'Chris'
+        //     };
+        // },
+        // beforeRouteEnter: (to, from, next) => {
+        //     next(vm => {
+        //         alert('Hi ' + vm.name);
+        //     });
+        // }
     }
 </script>
