@@ -9,13 +9,13 @@
                         <th>Add to basket</th>
                     </tr>
                 </thead>
-                <tbody v-for="item in getMenuItems" :key="item.id">
+                <tbody v-for="item in getMenuItems" :key="item['.key']">
                     <tr>
                         <td><strong>{{item.name}}</strong></td>
                     </tr>
                     <tr v-for="option in item.options" :key="option.id">
                         <td>{{option.size}}</td>
-                        <td>{{option.price}}</td>
+                        <td>{{option.price | currency}}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-success" type="button"
                             @click="addToBasket(item, option)">
@@ -51,11 +51,11 @@
                         </td>
                         
                         <td>{{item.name}} {{item.size }}"</td>
-                        <td>{{ item.price * item.quantity}}</td>
+                        <td>{{ item.price * item.quantity | currency}}</td>
                     </tr>
                 </tbody>
             </table>
-            <p>Order total: </p>
+            <p>Order total: {{total | currency}} </p>
             <button class="btn btn-success btn-block" @click="addNewOrder">Place Order</button>
         </div>
         <div v-else>
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+    import {dbOrdersRef} from '../firebaseConfig';
+
     export default {
         data(){
             return {
@@ -112,6 +114,13 @@
             getMenuItems() {
                 //return this.$store.state.menuItems;
                 return this.$store.getters.getMenuItems;
+            },
+            total(){
+                let totalCost = 0;
+                for(let item of this.basket){
+                    totalCost += item.quantity * item.price;
+                }
+                return totalCost;
             }
         },
         methods: {
@@ -136,7 +145,8 @@
                 }
             },
             addNewOrder(){
-                this.$store.commit('addOrder', this.basket);
+                //this.$store.commit('addOrder', this.basket);
+                dbOrdersRef.push(this.basket);
                 this.basket = [];
                 this.basketText = "Thank you, your order has been placed";
             }
